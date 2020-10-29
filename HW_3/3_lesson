@@ -1,0 +1,111 @@
+import Foundation
+
+enum Actions {
+    case openWindow
+    case engineStart
+    case fullTrunk
+    case carInfo
+}
+
+enum Parameters{
+    case vinCode
+    case color
+    case speed
+}
+
+struct SportCar {
+    var mark: String
+    var model: String
+    var year: Int
+    var trunkVolumn: Int
+    var window: Bool
+    var engine: Bool
+
+     func handleAction(action: Actions){
+        switch action {
+        case .carInfo:
+            print("Марка - \(mark). Модель - \(model). Год выпуска - \(year)")
+        case .openWindow:
+            if self.window {
+                print("окно открыто")
+            }  else{
+                print("окно закрыто")
+            }
+        case .fullTrunk:
+            print("объем багажника \(trunkVolumn)")
+        case .engineStart:
+            self.engine ? print("двигатель запущен") : print("двигатель выключен")
+
+        }
+    }
+}
+
+struct TruckCar {
+    var mark: String
+    var model: String
+    var year: Int
+    var trunkVolumn: Int
+    var color: String = "green"
+    var vinCode: Int = 8568395867
+    var speed: Int = 200
+    var luggage: Int
+    var trunkRemainder: Int { // остаток свободного места
+        get{
+            return self.trunkVolumn - self.luggage
+        }
+    }
+    var window: Bool
+    var engine: Bool
+
+    mutating func changeMark(change: Parameters){
+        switch change {
+        case .vinCode:
+            var mass = [String]()
+            for _ in 0...10{
+                let number = Int.random(in: 0...9)
+                let stringNUmber = String(number)
+                mass.append(stringNUmber)
+            }
+            let vin = Int(mass.joined(separator: ""))
+            self.vinCode = vin!
+            print("ваш новый вин-код: \(self.vinCode)")
+        case .color:
+            self.color = "red"
+        case .speed:
+            if self.speed >= 200 {
+                print("ваша скорость больше 200, установить ограничитель на \(self.speed - 20)")
+            }
+        }
+    }
+
+
+     func handleAction(action: Actions){
+        switch action {
+        case .carInfo:
+            print("Марка - \(mark). Модель - \(model). Год выпуска - \(year)г.")
+        case .openWindow:
+            self.window ? print("окно открыто") : print("окно закрыто")
+        case .fullTrunk:
+            print("осталось свободного места в багажнике - \(trunkRemainder)кг")
+        case .engineStart:
+            self.engine ? print("двигатель запущен") : print("двигатель выключен")
+        }
+    }
+}
+
+
+var car = SportCar(mark: "Porsche", model: "911", year: 2010, trunkVolumn: 100, window: false, engine: true)
+
+car.handleAction(action: .carInfo)
+car.handleAction(action: .fullTrunk)
+car.handleAction(action: .openWindow)
+car.handleAction(action: .engineStart)
+
+
+var truck = TruckCar(mark: "MAN", model: "MAN GTX", year: 2015, trunkVolumn: 1000, color: "black", vinCode: 3215467325, speed: 210, luggage: 453, window: true, engine: false)
+
+truck.changeMark(change: .color)
+truck.changeMark(change: .vinCode)
+truck.changeMark(change: .speed)
+
+truck.handleAction(action: .carInfo)
