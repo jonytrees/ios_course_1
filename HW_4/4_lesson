@@ -1,0 +1,75 @@
+import Foundation
+
+class Car {
+    var mark: String
+    var model: String
+    var power: Int
+    var maxSpeed: Int
+    var openWindow: Bool
+
+    init(mark: String, model: String, power: Int, maxSpeed: Int, openWindow: Bool){
+        self.mark = mark
+        self.model = model
+        self.power = power
+        self.maxSpeed = maxSpeed
+        self.openWindow = openWindow
+    }
+
+    func window(){
+        openWindow ? print("Окно открыто") : print("Окно закрыто")
+    }
+
+    func carInfo(mark: String, model: String){
+        self.mark = mark
+        self.model = model
+        print("Модель автомобиля: \(model). Марка автомобиля: \(mark)")
+    }
+}
+
+class TrunkCar: Car {
+    var trunkVolumn: Int
+    var luggage: Int
+    var vinCode: Int
+
+    init(trunkVolumn: Int, luggage: Int, mark: String, model: String, power: Int, maxSpeed: Int, openWindow: Bool, vinCode: Int) {
+        self.luggage = luggage
+        self.trunkVolumn = trunkVolumn
+        self.vinCode = vinCode
+        super.init(mark: mark, model: model, power: power, maxSpeed: maxSpeed, openWindow: openWindow)
+    }
+
+    func vinCodeFunc(){
+        var mass = [String]()
+        for _ in 0...10{
+            let number = Int.random(in: 0...9)
+            let stringNUmber = String(number)
+          mass.append(stringNUmber)
+        }
+        let vin = Int(mass.joined(separator: ""))
+        self.vinCode = vin!
+        print("ваш новый вин-код: \(self.vinCode)")
+    }
+}
+
+
+class SportCar: Car {
+    var year: Int
+    var engineVolumn: Int
+
+    init(year: Int, engineVolumn: Int, mark: String, model: String, power: Int, maxSpeed: Int, openWindow: Bool) {
+        self.engineVolumn = engineVolumn
+        self.year = year
+        super.init(mark: mark, model: model, power: power, maxSpeed: maxSpeed, openWindow: openWindow)
+    }
+
+    override func window(){
+        openWindow ? print("Твое окно открыто - закрой") : print("Твое окно закрыто - открой")
+    }
+}
+
+
+var Porsche = SportCar(year: 2015, engineVolumn: 5, mark: "Porsche", model: "911", power: 350, maxSpeed: 280, openWindow: true)
+Porsche.window()
+
+var MAN = TrunkCar(trunkVolumn: 1000, luggage: 350, mark: "MAN", model: "MN350", power: 500, maxSpeed: 210, openWindow: false, vinCode: 23124535)
+MAN.vinCodeFunc()

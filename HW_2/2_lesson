@@ -1,0 +1,53 @@
+import Foundation
+
+// задание 1
+func funcNumbers(number: Int){
+    if number % 2 == 0 {
+        print("четное число")
+    } else{
+        print("нечетное число")
+    }
+}
+
+funcNumbers(number: 10)
+funcNumbers(number: 11)
+
+
+
+// задание 2
+func funcThree(number: Int){
+    if number % 3 == 0 {
+        print("делится")
+    } else{
+        print("не делится")
+    }
+}
+
+funcThree(number: 15)
+funcThree(number: 13)
+
+
+// задание 3
+var newArr: Array<Int> = []
+
+for i in 1...100{
+    newArr.append(i)
+}
+newArr
+
+
+// задание 4
+newArr = newArr.filter{$0 % 2 == 0 && $0 % 3 == 0}
+print(newArr)
+
+
+// задание 5
+func funcFiba(n: Int) -> [Double]{
+    var arrFab: [Double] = [0,1]
+    for i in 2...n {
+        arrFab.append(arrFab[i - 1] + arrFab[i - 2])
+    }
+    return arrFab
+}
+
+print(funcFiba(n: 100))
