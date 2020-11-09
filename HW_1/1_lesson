@@ -1,0 +1,45 @@
+import Foundation
+
+
+// задание 1
+func Discript (a: Int, b: Int, c: Int) -> () {
+    let D = b * b - 4 * a * c
+    if D < 0 {
+        print("Корней нет")
+    } else  if D > 0{
+        let number_x1 = (-(b) + Int(sqrt(Double(D)))) / (2 * (a))
+        let number_x2 = (-(b) - Int(sqrt(Double(D)))) / (2 * (a))
+        print("Корень 1 = \(number_x1)")
+        print("Корень 2 = \(number_x2)")
+    } else {
+        let number_x3 = (-(b) + Int(sqrt(Double(D)))) / (2 * (a))
+        print("Корень = \(number_x3)")
+    }
+}
+Discript(a: -1, b: -2, c: 15)
+
+
+
+
+// задание 2
+let leg_1 = 3
+let leg_2 = 4
+let hypotenuse = Int(sqrt(Double(leg_1 * leg_1 + leg_2 * leg_2)))
+let S = (leg_2 * leg_2) / 2 //
+let Per = leg_1 + leg_2 + hypotenuse
+print(S)
+print(hypotenuse)
+print(Per)
+
+
+
+
+// задание 3
+let sum = 50000
+let rate = 4.7
+let years = 5
+let calen = 365
+let days = 365 * years
+let deposit_days = days / calen
+let Profit = (Double(sum) * rate * Double(deposit_days)) / 100
+print(Profit)
