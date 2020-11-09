@@ -1,0 +1,86 @@
+import Foundation
+
+protocol Shape {
+    var area: Double { get }
+    var perimetr: Double { get }
+}
+
+struct Queue<T: Shape> {
+    private var elements: [T] = []
+
+    mutating func pop() -> T?{
+        guard elements.count > 0 else {
+            return nil
+        }
+        return elements.removeFirst()
+    }
+
+    mutating func push(_ element: T) {
+        elements.append(element)
+    }
+
+    func calculatePerimetr() -> Double {
+        var totalPeriment = 0.0
+        elements.forEach {
+            totalPeriment += $0.perimetr
+        }
+        return totalPeriment
+    }
+
+    mutating func filterArr(element: (T) -> Bool) -> [T] {
+        var filterArr = [T]()
+
+        for i in elements {
+            if element(i) {
+                filterArr.append(i)
+            }
+        }
+
+        return filterArr
+    }
+
+    subscript(index: Int) -> T? {
+        guard elements.count > 0, index >= 0, index < elements.count else {
+            return nil
+        }
+        print(elements[index].area, elements[index].perimetr)
+        return elements[index]
+    }
+}
+
+
+class Circle: Shape {
+    var area: Double { return 2 * Double.pi * side }
+    var perimetr: Double { return Double.pi * side * side }
+    var side: Double
+
+    init(side: Double) {
+        self.side = side
+    }
+}
+
+class Square: Shape {
+    var area: Double { return side * side }
+    var perimetr: Double { return 4 * side }
+    var side: Double
+
+    init(side: Double) {
+        self.side = side
+    }
+}
+
+var sq_1 = Circle(side: 1)
+var sq_2 = Circle(side: 2)
+var sq_3 = Circle(side: 3)
+var sq_4 = Circle(side: 4)
+var sq_5 = Circle(side: 5)
+
+let array = [sq_1, sq_2, sq_3, sq_4, sq_5]
+
+var queueOfSquare = Queue<Circle>()
+array.forEach { queueOfSquare.push($0)}
+queueOfSquare.calculatePerimetr()
+//queueOfSquare.pop()
+queueOfSquare[3]?.area
+let filter = queueOfSquare.filterArr(element: {$0.side == 4})
+print(filter)
