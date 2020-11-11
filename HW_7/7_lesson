@@ -1,0 +1,66 @@
+import Foundation
+
+enum AutoErrors: Error {
+    case loginError
+    case passError
+    case mailError
+}
+
+
+struct Authorization: Error{
+    var description: String
+    var errorType: AutoErrors
+
+}
+
+func autoEmptyUser(login: String, pass: String, email: String) throws -> Bool {
+
+    guard login != ""  else {
+        throw Authorization(description: "Enter your login", errorType: AutoErrors.loginError)
+    }
+
+    guard pass != "" else {
+        throw Authorization(description: "Enter your password", errorType: AutoErrors.passError)
+    }
+
+    guard email != "" else {
+        throw Authorization(description: "Enter your email", errorType: AutoErrors.mailError)
+    }
+
+    return true
+}
+
+var loginOfUser = "jony_user"
+var passOfUser = "123"
+var emailOfUser = "jony_user@gmail.com"
+
+func autoUser(login: String, pass: String, email: String) throws -> Bool {
+    guard loginOfUser == login else {
+        throw Authorization(description: "Логин неверен", errorType: AutoErrors.loginError)
+    }
+
+    guard passOfUser == pass else {
+        throw Authorization(description: "Пароль неверен", errorType: AutoErrors.passError)
+    }
+
+    guard emailOfUser == email else {
+        throw Authorization(description: "Емейл неверен", errorType: AutoErrors.mailError)
+    }
+
+    return true
+}
+
+
+do{
+    _ = try autoEmptyUser(login: "ererg", pass: "", email: "wefw@wrferg")
+}
+
+catch{
+    let error = error as! Authorization
+    print(error.description)
+}
+
+
+
+let x = try? autoUser(login: "vasiy", pass: "1234", email: "jony_user@gmail.com")
+print(x)

@@ -1,0 +1,103 @@
+import Foundation
+
+protocol Car: AnyObject {
+    var mark: String { get }
+    var model: String { get }
+    var hp: Int { get }
+    var maxSpeed: Int { get }
+    var window: Bool { get set }
+    var engine: Bool { get set }
+    var bak: Double { get set }
+    var remainderBak: Double { get set }
+    var consumption: Double { get set } // расход бензина при работающем двигателе
+
+    func fullBak()
+}
+
+extension Car {
+
+    func window(window: Bool){
+        self.window = window
+        if window {
+            print("Окно сейчас открыто, а теперь будет закрыто")
+            self.window.toggle()
+        } else {
+            print("Окно сейчас закрыто, а теперь будет открыто")
+            self.window.toggle()
+        }
+    }
+
+    func engineStart(engine: Bool, consumption: Double){ // при рабочем двигателе будет уменьшаться бензин в баке и увеличиться переменная разхода
+        self.engine = engine
+        self.consumption = consumption
+        if engine {
+            print("Двигатель запущен. Начался расход бензина.")
+            self.bak = self.bak - consumption
+            self.remainderBak += consumption
+        } else {
+            print("Двигатель выключен. Расхода бензина нет. В баке осталось \(self.bak)")
+        }
+    }
+}
+
+
+class SportCar: Car {
+
+    var mark: String = ""
+    var model: String = ""
+    var hp: Int = 0
+    var maxSpeed: Int = 0
+    var window: Bool = true
+    var engine: Bool = true
+    var bak: Double = 0.0
+    var remainderBak: Double = 0.0
+    var consumption : Double = 0.0
+
+    var width: Double
+    var height: Double
+    var weight: Double
+
+    func fullBak() {
+        var proc = 100 - (self.remainderBak * 100 / self.bak)
+        proc = proc.rounded()
+
+        if proc > 50 {
+            print("У вас в баке больше половины бензина, можете ехать дальше. Осталось \(proc)% бензина")
+        } else if proc <= 0 {
+            print("Вы исразходовали весь бензин.")
+        } else {
+            print("У вас в баке меньше половины. Осталось \(proc)% бензина")
+        }
+    }
+
+    init(width: Double, height: Double, weight: Double){
+        self.width = width
+        self.height = height
+        self.weight = weight
+    }
+
+
+}
+
+extension SportCar: CustomStringConvertible {
+    var description: String {
+        return "Марка машины: \(self.mark). Модель машины: \(self.model). Ширина машины \(self.width). Высота машины \(self.height). Вес машины \(self.weight). Бензина осталось \(self.bak)"
+    }
+}
+
+
+var Porsch = SportCar(width: 2.6, height: 1.8, weight: 1500)
+Porsch.hp = 350
+Porsch.bak = 35
+Porsch.window(window: false)
+Porsch.engineStart(engine: true, consumption: 1)
+Porsch.engineStart(engine: true, consumption: 1.5)
+
+Porsch.fullBak()
+Porsch.remainderBak
+Porsch.bak
+Porsch.mark = "Porsch"
+Porsch.model = "911"
+Porsch.maxSpeed = 1000
+
+print(Porsch)

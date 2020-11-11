@@ -1,0 +1,115 @@
+import Foundation
+
+// в игре есть установка позиции по координатам. Игровое поле составляет 0...99. Если вышел за границы игра возвращает обратно
+// Параметры оружия (количетсво патронов, урон, дальность полета пули) устанавливается в зависимости от названия оружия.
+// Попадание определяется с помощью позиции игроков и дальности полета пули. Область попадания в цель определяется позиция игрока + дальность полета пули. Если цель в радиусе попадания то стрелок попал, иначе не попал.
+
+
+protocol Shooter: AnyObject {
+    var nikname: String { get }
+    var health: Int { get set }
+    var weapon : String { get set } // название оружия
+    var cartridges: Int { get set } // количество патронов
+    var damage: Int { get set } // урон
+    var firingRange: Int { get set } // дальность полета патрона
+    var position: [Int] { get set }
+
+    func shooting(enemy: inout Shooter)
+}
+
+extension Shooter {
+    func createArm(){
+        if self.weapon == "Glock-17" {
+            self.cartridges = 20
+            self.damage = 20
+            self.firingRange = 15
+        }
+
+        if self.weapon == "AK-47" {
+            self.cartridges = 90
+            self.damage = 10
+            self.firingRange = 5
+        }
+    }
+
+    func walking(x: Int, y: Int){
+        self.position[0] += x
+        self.position[1] += y
+
+        if self.position[0] > 100 || self.position[1] > 100 {
+            self.position[0] = 99
+            self.position[1] = 99
+            print("\(self.nikname), вы вышли за границы игрового поля. Ваша позиция теперь \(self.position)")
+        }
+    }
+
+    func shooting(enemy: inout Shooter) {
+
+        if (enemy.position[0] > self.firingRange + self.position[0] && enemy.position[1] > self.firingRange + self.position[1]) || (enemy.position[0] < self.firingRange - self.position[0] && enemy.position[1] < self.firingRange - self.position[1]) {
+            self.cartridges -= 1
+            print("\(nikname), вы промахнулись")
+        } else {
+            enemy.health -= self.damage
+            self.cartridges -= 1
+            print("\(enemy.nikname), в вас попали. У вас осталось \(enemy.health) здоровья. \(self.nikname), вы попали. У вас осталось \(self.cartridges) патронов.")
+        }
+
+        if enemy.health <= 0 {
+            print("\(enemy.nikname), вас убили. Игрок \(nikname) выиграл")
+        }
+
+        if enemy.cartridges <= 0 {
+            print("У вас закончились патроны. Вы проиграли")
+        }
+    }
+}
+
+
+class Policman: Shooter {
+    var cartridges: Int = 0
+    var damage: Int = 0
+    var nikname: String
+    var health: Int = 50
+    var weapon: String
+    var firingRange: Int = 0
+    var position: [Int] = [0, 0]
+
+    init(nikname: String, weapon: String, position: [Int]){
+        self.nikname = nikname
+        self.weapon = weapon
+        self.position = position
+    }
+}
+
+class Ganster: Shooter{
+    var cartridges: Int = 0
+    var damage: Int = 0
+    var nikname: String
+    var health: Int = 60
+    var weapon: String
+    var firingRange: Int = 0
+    var position: [Int] = [0, 0]
+
+    init(nikname: String, weapon: String, position: [Int]){
+        self.nikname = nikname
+        self.weapon = weapon
+        self.position = position
+    }
+}
+
+var robocop = Policman(nikname: "robocop", weapon: "Glock-17", position: [30, 50]) as Shooter
+var criminal = Ganster(nikname: "criminal", weapon: "AK-47", position: [0, 0]) as Shooter
+
+robocop.createArm() // инициализация оружия
+criminal.createArm() // инициализация оружия
+
+
+
+(criminal).shooting(enemy: &robocop)
+robocop.health
+criminal.walking(x: 40, y: 55)
+(criminal).shooting(enemy: &robocop)
+criminal.walking(x: 20, y: 50)
+(criminal).shooting(enemy: &robocop)
+robocop.walking(x: 50, y: 50)
+(robocop).shooting(enemy: &criminal)
